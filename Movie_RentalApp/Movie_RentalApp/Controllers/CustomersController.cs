@@ -44,6 +44,7 @@ namespace Movie_RentalApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customers customers)
         {
             if(!ModelState.IsValid)

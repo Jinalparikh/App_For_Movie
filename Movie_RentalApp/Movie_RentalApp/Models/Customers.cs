@@ -22,5 +22,6 @@ namespace Movie_RentalApp.Models
         [Display(Name = "Date of Birth")]
         [Min18yearsIfaMember]
         public DateTime? Birthdate { get; set; }
+
     }
 }

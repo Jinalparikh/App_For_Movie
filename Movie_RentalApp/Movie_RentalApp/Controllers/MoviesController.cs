@@ -51,17 +51,30 @@ namespace Movie_RentalApp.Controllers
                 return HttpNotFound();
             }
 
-            var viewModel = new MovieFromViewModel()
+            var viewModel = new MovieFromViewModel(movies)
             {
-                movies = movies,
                 Genres = _context.Genres.ToList(),
             };
             
             return View("MovieForm", viewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Movies movies)
         {
+            if(!ModelState.IsValid)
+            {
+                var movie = _context.Movies.SingleOrDefault(m => m.Id == movies.Id);
+
+                var viewmodel = new MovieFromViewModel(movies)
+                {
+                    Genres = _context.Genres.ToList()
+                };
+
+                return View("MovieForm",viewmodel);
+            }
+
             if(movies.Id == 0)
             {
                 movies.DateAdded = DateTime.Now;
