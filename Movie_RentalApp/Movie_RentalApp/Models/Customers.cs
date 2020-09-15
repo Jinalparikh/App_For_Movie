@@ -20,6 +20,7 @@ namespace Movie_RentalApp.Models
         public byte MembershipTypeId { get; set; }
 
         [Display(Name = "Date of Birth")]
+        [Min18yearsIfaMember]
         public DateTime? Birthdate { get; set; }
     }
 }

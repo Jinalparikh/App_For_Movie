@@ -12,5 +12,10 @@ namespace Movie_RentalApp.Models
         public short SignUpFee { get; set; }
         public byte DurationsInMonths { get; set; }
         public byte DiscountRate { get; set; }
+
+        public static readonly byte unknown = 0;
+
+        public static readonly byte PayAsYouGo = 1;
+
     }
 }

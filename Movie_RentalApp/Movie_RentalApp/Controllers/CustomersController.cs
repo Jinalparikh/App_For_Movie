@@ -36,20 +36,61 @@ namespace Movie_RentalApp.Controllers
 
             var ModelView = new CustomerMembershipTypeMovdelView()
             {
+                customers = new Customers(),
                 MembershiptypeList = membershiptype,
             };
 
-            return View(ModelView);
+            return View("CustomerForm", ModelView);
         }
 
         [HttpPost]
-        public ActionResult Create(Customers customers)
+        public ActionResult Save(Customers customers)
         {
-            _context.Customers.Add(customers);
+            if(!ModelState.IsValid)
+            {
+                var viewModel = new CustomerMembershipTypeMovdelView
+                {
+                    customers = customers,
+                    MembershiptypeList = _context.MembershipType.ToList()
+                };
+                return View("CustomerForm", viewModel);
+            }
 
+            if(customers.Id == 0)
+            {
+                _context.Customers.Add(customers);
+            }
+            else
+            {
+                var customerInDb = _context.Customers.Single(c => c.Id == customers.Id);
+
+                customerInDb.Name = customers.Name;
+                customerInDb.Birthdate = customers.Birthdate;
+                customerInDb.IsSubscribedToNewsletter = customers.IsSubscribedToNewsletter;
+                customerInDb.MembershipTypeId = customers.MembershipTypeId;
+
+            }
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Customers");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
+
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            var viewModel = new CustomerMembershipTypeMovdelView()
+            {
+                customers = customer,
+                MembershiptypeList = _context.MembershipType.ToList()
+            };
+
+            return View("CustomerForm", viewModel);
         }
 
         public ActionResult Details(int id)
